@@ -1,0 +1,26 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Encurtar URL</h1>
+        <p class="text-gray-600">Digite a URL que você deseja encurtar</p>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="bg-white shadow-lg rounded-lg p-8">
+      <.url_form changeset={@changeset} action={~p"/urls"} />
+    </div>
+
+    <!-- Navigation -->
+    <div class="mt-6 text-center">
+      <.link href={~p"/"} class="text-gray-600 hover:text-gray-800 underline mr-4">
+        ← Início
+      </.link>
+      <.link href={~p"/urls"} class="text-blue-600 hover:text-blue-800 underline">
+        Ver todas as URLs
+      </.link>
+    </div>
+  </div>
+</div>

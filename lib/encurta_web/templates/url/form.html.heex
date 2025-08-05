@@ -1,0 +1,7 @@
+<div class="mt-4">
+  <p class="text-green-600">
+    <%= if @url.short do %>
+      Link encurtado: <%= Routes.url_url(@socket, :redirect_by_short, @url.short) %>
+    <% end %>
+  </p>
+</div>

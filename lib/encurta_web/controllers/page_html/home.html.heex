@@ -1,0 +1,32 @@
+<.flash_group flash={@flash} />
+
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
+  <div class="max-w-md w-full space-y-8">
+    <div class="text-center">
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">Encurta</h1>
+      <p class="text-lg text-gray-600">Encurtador de URLs simples e rápido</p>
+    </div>
+    
+    <div class="bg-white shadow-lg rounded-lg p-6 space-y-6">
+      <div>
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Encurtar nova URL</h2>
+        <.link href={~p"/urls/new"} class="w-full">
+          <.button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition duration-200">
+            Encurtar URL
+          </.button>
+        </.link>
+      </div>
+      
+      <div class="border-t pt-4">
+        <h3 class="text-lg font-medium text-gray-800 mb-3">Suas URLs</h3>
+        <.link href={~p"/urls"} class="text-blue-600 hover:text-blue-800 underline">
+          Ver todas as URLs encurtadas
+        </.link>
+      </div>
+    </div>
+    
+    <div class="text-center text-sm text-gray-500">
+      <p>© 2025 Encurta - Desenvolvido com Phoenix Framework</p>
+    </div>
+  </div>
+</div>

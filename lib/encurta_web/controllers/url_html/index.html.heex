@@ -1,0 +1,100 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">URLs Encurtadas</h1>
+          <p class="text-gray-600 mt-1">Gerencie todas as suas URLs encurtadas</p>
+        </div>
+        <div class="flex gap-3">
+          <.link href={~p"/"} class="text-gray-600 hover:text-gray-800 underline">
+            ← Início
+          </.link>
+          <.link href={~p"/urls/new"}>
+            <.button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200">
+              + Encurtar Nova URL
+            </.button>
+          </.link>
+        </div>
+      </div>
+    </div>
+
+    <!-- URLs Cards -->
+    <div class="space-y-4">
+      <%= if @urls == [] do %>
+        <div class="bg-white shadow-lg rounded-lg p-8 text-center">
+          <div class="text-gray-400 mb-4">
+            <svg class="mx-auto h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhuma URL encurtada ainda</h3>
+          <p class="text-gray-600 mb-6">Comece criando sua primeira URL encurtada</p>
+          <.link href={~p"/urls/new"}>
+            <.button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200">
+              Encurtar URL
+            </.button>
+          </.link>
+        </div>
+      <% else %>
+        <%= for url <- @urls do %>
+          <div class="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition duration-200">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 items-center">
+              <!-- URL Original -->
+              <div class="lg:col-span-1">
+                <label class="text-sm font-medium text-gray-500 uppercase tracking-wide">URL Original</label>
+                <.link href={url.url} target="_blank" class="block text-blue-600 hover:text-blue-800 underline truncate mt-1" title={url.url}>
+                  {url.url}
+                </.link>
+              </div>
+              
+              <!-- URL Encurtada -->
+              <div class="lg:col-span-1">
+                <label class="text-sm font-medium text-gray-500 uppercase tracking-wide">URL Encurtada</label>
+                <div class="flex items-center gap-2 mt-1">
+                  <.link href={~p"/#{url.short}"} target="_blank" class="text-green-600 hover:text-green-800 underline font-mono text-sm">
+                    {EncurtaWeb.Endpoint.url() <> "/" <> url.short}
+                  </.link>
+                  <button 
+                    class="p-1 text-gray-400 hover:text-gray-600 transition duration-200"
+                    onclick={"navigator.clipboard.writeText('#{EncurtaWeb.Endpoint.url()}/#{url.short}'); this.innerHTML='✓'; setTimeout(() => this.innerHTML='📋', 1000)"}
+                    title="Copiar URL"
+                  >
+                    📋
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Data de Criação -->
+              <div class="lg:col-span-1">
+                <label class="text-sm font-medium text-gray-500 uppercase tracking-wide">Criado em</label>
+                <p class="text-sm text-gray-700 mt-1">
+                  {Calendar.strftime(url.inserted_at, "%d/%m/%Y %H:%M")}
+                </p>
+              </div>
+              
+              <!-- Ações -->
+              <div class="lg:col-span-1 flex gap-2 justify-end">
+                <.link navigate={~p"/urls/#{url}"} class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                  Ver
+                </.link>
+                <.link navigate={~p"/urls/#{url}/edit"} class="text-yellow-600 hover:text-yellow-800 text-sm font-medium">
+                  Editar
+                </.link>
+                <.link 
+                  href={~p"/urls/#{url}"} 
+                  method="delete" 
+                  data-confirm="Tem certeza que deseja deletar esta URL?" 
+                  class="text-red-600 hover:text-red-800 text-sm font-medium"
+                >
+                  Deletar
+                </.link>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
