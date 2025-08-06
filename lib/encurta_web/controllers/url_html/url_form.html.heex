@@ -1,26 +1,32 @@
-<.simple_form :let={f} for={@changeset} action={@action} class="space-y-6">
+<.simple_form :let={f} for={@changeset} action={@action} class="space-y-4">
   <.error :if={@changeset.action}>
-    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-      <strong>Erro:</strong> Verifique os campos abaixo e tente novamente.
+    <div class="text-terminal-error text-sm font-mono">
+      Error: Please check your input and try again.
     </div>
   </.error>
   
-  <div>
+  <!-- Simple command input -->
+  <div class="flex items-center gap-2 font-mono">
+    <span class="text-terminal-primary">$</span>
+    <span class="text-terminal-text">shorten</span>
     <.input 
       field={f[:url]} 
       type="url" 
-      label="URL para encurtar" 
-      placeholder="https://exemplo.com/sua-url-muito-longa" 
-      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg"
+      label=""
+      placeholder="https://example.com/your-long-url" 
+      class="flex-1 terminal-input"
     />
-    <p class="mt-2 text-sm text-gray-500">
-      Cole aqui a URL que você deseja encurtar. Deve começar com http:// ou https://
-    </p>
   </div>
   
   <:actions>
-    <.button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition duration-200 text-lg">
-      🔗 Encurtar URL
-    </.button>
+    <div class="flex gap-4">
+      <button type="submit" class="terminal-button text-sm">
+        execute
+      </button>
+      
+      <button type="reset" class="text-terminal-muted hover:text-terminal-text text-sm" onclick="document.querySelector('input[type=url]').value = ''">
+        clear
+      </button>
+    </div>
   </:actions>
 </.simple_form>

@@ -115,21 +115,18 @@ defmodule EncurtaWeb.CoreComponents do
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[
-        "fixed top-2 right-2 mr-2 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1",
-        @kind == :info && "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
-        @kind == :error && "bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
+        "terminal-flash mb-4",
+        @kind == :info && "success",
+        @kind == :error && "error"
       ]}
       {@rest}
     >
-      <p :if={@title} class="flex items-center gap-1.5 text-sm font-semibold leading-6">
-        <.icon :if={@kind == :info} name="hero-information-circle-mini" class="h-4 w-4" />
-        <.icon :if={@kind == :error} name="hero-exclamation-circle-mini" class="h-4 w-4" />
-        {@title}
-      </p>
-      <p class="mt-2 text-sm leading-5">{msg}</p>
-      <button type="button" class="group absolute top-1 right-1 p-2" aria-label={gettext("close")}>
-        <.icon name="hero-x-mark-solid" class="h-5 w-5 opacity-40 group-hover:opacity-70" />
-      </button>
+      <div class="flex items-center gap-2">
+        <span :if={@kind == :info} class="text-terminal-primary font-bold">✓</span>
+        <span :if={@kind == :error} class="text-terminal-error font-bold">✗</span>
+        <span :if={@title} class="font-bold">{@title}</span>
+      </div>
+      <div class="mt-1 text-sm font-mono">{msg}</div>
     </div>
     """
   end
@@ -202,9 +199,9 @@ defmodule EncurtaWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white">
+      <div class="space-y-6">
         {render_slot(@inner_block, f)}
-        <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
+        <div :for={action <- @actions} class="flex items-center gap-4">
           {render_slot(action, f)}
         </div>
       </div>
@@ -231,8 +228,7 @@ defmodule EncurtaWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "terminal-button",
         @class
       ]}
       {@rest}
@@ -310,7 +306,7 @@ defmodule EncurtaWeb.CoreComponents do
 
     ~H"""
     <div>
-      <label class="flex items-center gap-4 text-sm leading-6 text-zinc-600">
+      <label class="flex items-center gap-4 text-sm leading-6 text-terminal-text font-mono">
         <input type="hidden" name={@name} value="false" disabled={@rest[:disabled]} />
         <input
           type="checkbox"
@@ -318,7 +314,7 @@ defmodule EncurtaWeb.CoreComponents do
           name={@name}
           value="true"
           checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
+          class="rounded border-terminal-secondary bg-transparent text-terminal-primary focus:ring-0 focus:border-terminal-primary"
           {@rest}
         />
         {@label}
@@ -331,11 +327,15 @@ defmodule EncurtaWeb.CoreComponents do
   def input(%{type: "select"} = assigns) do
     ~H"""
     <div>
-      <.label for={@id}>{@label}</.label>
+      <.label :if={@label && @label != ""} for={@id} class="text-terminal-muted text-xs font-mono uppercase">{@label}</.label>
       <select
         id={@id}
         name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
+        class={[
+          "terminal-input mt-1 block w-full font-mono",
+          @errors == [] && "border-terminal-secondary focus:border-terminal-primary",
+          @errors != [] && "border-terminal-error focus:border-terminal-error"
+        ]}
         multiple={@multiple}
         {@rest}
       >
@@ -350,14 +350,14 @@ defmodule EncurtaWeb.CoreComponents do
   def input(%{type: "textarea"} = assigns) do
     ~H"""
     <div>
-      <.label for={@id}>{@label}</.label>
+      <.label :if={@label && @label != ""} for={@id} class="text-terminal-muted text-xs font-mono uppercase">{@label}</.label>
       <textarea
         id={@id}
         name={@name}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 min-h-[6rem]",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
+          "terminal-input mt-1 block w-full font-mono min-h-[6rem]",
+          @errors == [] && "border-terminal-secondary focus:border-terminal-primary",
+          @errors != [] && "border-terminal-error focus:border-terminal-error"
         ]}
         {@rest}
       >{Phoenix.HTML.Form.normalize_value("textarea", @value)}</textarea>
@@ -370,20 +370,20 @@ defmodule EncurtaWeb.CoreComponents do
   def input(assigns) do
     ~H"""
     <div>
-      <.label for={@id}>{@label}</.label>
+      <.label :if={@label && @label != ""} for={@id} class="text-terminal-muted text-xs font-mono uppercase">{@label}</.label>
       <input
         type={@type}
         name={@name}
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
+          "terminal-input mt-1 block w-full font-mono",
+          @errors == [] && "border-terminal-secondary focus:border-terminal-primary",
+          @errors != [] && "border-terminal-error focus:border-terminal-error"
         ]}
         {@rest}
       />
-      <.error :for={msg <- @errors}>{msg}</.error>
+      <.error :for={msg <- @errors} class="text-terminal-error text-xs font-mono mt-1">{msg}</.error>
     </div>
     """
   end
@@ -392,11 +392,12 @@ defmodule EncurtaWeb.CoreComponents do
   Renders a label.
   """
   attr :for, :string, default: nil
+  attr :class, :string, default: nil
   slot :inner_block, required: true
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800">
+    <label for={@for} class={["block text-xs font-mono uppercase", @class || "text-terminal-muted"]}>
       {render_slot(@inner_block)}
     </label>
     """
@@ -409,9 +410,8 @@ defmodule EncurtaWeb.CoreComponents do
 
   def error(assigns) do
     ~H"""
-    <p class="mt-3 flex gap-3 text-sm leading-6 text-rose-600">
-      <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
-      {render_slot(@inner_block)}
+    <p class={["mt-1 text-xs font-mono", @class || "text-terminal-error"]}>
+      ✗ {render_slot(@inner_block)}
     </p>
     """
   end
@@ -429,10 +429,10 @@ defmodule EncurtaWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
-        <h1 class="text-lg font-semibold leading-8 text-zinc-800">
+        <h1 class="text-lg font-bold leading-8 text-terminal-primary font-mono uppercase">
           {render_slot(@inner_block)}
         </h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
+        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-terminal-muted font-mono">
           {render_slot(@subtitle)}
         </p>
       </div>
@@ -473,12 +473,12 @@ defmodule EncurtaWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
-      <table class="w-[40rem] mt-11 sm:w-full">
-        <thead class="text-sm text-left leading-6 text-zinc-500">
-          <tr>
-            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal">{col[:label]}</th>
-            <th :if={@action != []} class="relative p-0 pb-4">
+    <div class="overflow-y-auto">
+      <table class="w-full font-mono">
+        <thead class="text-sm text-left leading-6 text-terminal-primary">
+          <tr class="border-b border-terminal-secondary">
+            <th :for={col <- @col} class="p-4 font-bold uppercase">{col[:label]}</th>
+            <th :if={@action != []} class="relative p-4">
               <span class="sr-only">{gettext("Actions")}</span>
             </th>
           </tr>
@@ -486,27 +486,23 @@ defmodule EncurtaWeb.CoreComponents do
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
+          class="relative divide-y divide-terminal-muted text-sm leading-6 text-terminal-text"
         >
-          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
+          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-black hover:bg-opacity-20">
             <td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
-              class={["relative p-0", @row_click && "hover:cursor-pointer"]}
+              class={["relative p-4", @row_click && "hover:cursor-pointer"]}
             >
-              <div class="block py-4 pr-6">
-                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
-                <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
-                  {render_slot(col, @row_item.(row))}
-                </span>
-              </div>
+              <span class={["relative", i == 0 && "font-semibold text-terminal-success"]}>
+                {render_slot(col, @row_item.(row))}
+              </span>
             </td>
-            <td :if={@action != []} class="relative w-14 p-0">
-              <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium">
-                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
+            <td :if={@action != []} class="relative p-4">
+              <div class="relative text-right">
                 <span
                   :for={action <- @action}
-                  class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+                  class="relative text-terminal-info hover:text-terminal-primary mr-4 last:mr-0"
                 >
                   {render_slot(action, @row_item.(row))}
                 </span>
@@ -535,11 +531,11 @@ defmodule EncurtaWeb.CoreComponents do
 
   def list(assigns) do
     ~H"""
-    <div class="mt-14">
-      <dl class="-my-4 divide-y divide-zinc-100">
-        <div :for={item <- @item} class="flex gap-4 py-4 text-sm leading-6 sm:gap-8">
-          <dt class="w-1/4 flex-none text-zinc-500">{item.title}</dt>
-          <dd class="text-zinc-700">{render_slot(item)}</dd>
+    <div class="mt-6">
+      <dl class="-my-2 divide-y divide-terminal-muted">
+        <div :for={item <- @item} class="flex gap-4 py-4 text-sm leading-6 sm:gap-8 font-mono">
+          <dt class="w-1/4 flex-none text-terminal-primary font-bold uppercase">{item.title}</dt>
+          <dd class="text-terminal-text">{render_slot(item)}</dd>
         </div>
       </dl>
     </div>

@@ -15,6 +15,19 @@ module.exports = {
     extend: {
       colors: {
         brand: "#FD4F00",
+        terminal: {
+          bg: "#0a0a0a",
+          primary: "#00ff00",
+          secondary: "#00aa00",
+          text: "#c0c0c0",
+          muted: "#666666",
+          error: "#ff5555",
+          warning: "#ffaa00",
+          info: "#55aaff",
+        }
+      },
+      fontFamily: {
+        mono: ['JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', 'monospace'],
       }
     },
   },

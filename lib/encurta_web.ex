@@ -89,6 +89,8 @@ defmodule EncurtaWeb do
       import Phoenix.HTML
       # Core UI components
       import EncurtaWeb.CoreComponents
+      # Terminal UI components
+      import EncurtaWeb.TerminalComponents
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS

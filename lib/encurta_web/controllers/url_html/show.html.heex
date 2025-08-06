@@ -1,93 +1,115 @@
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Header -->
-    <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
-      <div class="text-center">
-        <div class="text-green-500 mb-4">
-          <svg class="mx-auto h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">URL Encurtada com Sucesso!</h1>
-        <p class="text-gray-600">Sua URL foi encurtada e está pronta para uso</p>
+<div class="p-8 space-y-6">
+  <!-- Terminal Command Header -->
+  <div class="space-y-2">
+    <div class="terminal-output">
+      <span class="terminal-info">Executing command: show --id=<%= @url.id %></span>
+    </div>
+    
+    <div class="terminal-output">
+      <span class="terminal-text">Loading URL entry from database...</span>
+    </div>
+    
+    <div class="terminal-output">
+      <span class="terminal-success">Entry loaded successfully</span>
+    </div>
+  </div>
+
+  <!-- Success Header -->
+  <div class="border border-terminal-primary rounded p-6">
+    <div class="terminal-title text-center mb-4">
+      URL SHORTENING OPERATION COMPLETED
+    </div>
+    
+    <div class="text-center space-y-2">
+      <div class="text-6xl text-terminal-primary mb-2">✓</div>
+      <div class="terminal-success">Operation executed successfully</div>
+      <div class="terminal-muted text-xs">New short URL generated and stored in database</div>
+    </div>
+  </div>
+
+  <!-- URL Details Output -->
+  <div class="space-y-6">
+    <!-- Original URL -->
+    <div class="border-l-4 border-terminal-info pl-4">
+      <div class="text-xs text-terminal-muted font-bold mb-1">ORIGINAL_URL:</div>
+      <div class="font-mono text-sm break-all">
+        <.link href={@url.url} target="_blank" class="terminal-link">
+          <%= @url.url %>
+        </.link>
       </div>
     </div>
 
-    <!-- URL Details Card -->
-    <div class="bg-white shadow-lg rounded-lg p-8 space-y-6">
-      <!-- URL Original -->
-      <div>
-        <label class="block text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">URL Original</label>
-        <div class="bg-gray-50 p-4 rounded-lg border">
-          <.link href={@url.url} target="_blank" class="text-blue-600 hover:text-blue-800 underline break-all">
-            {@url.url}
-          </.link>
-        </div>
-      </div>
-
-      <!-- URL Encurtada -->
-      <div>
-        <label class="block text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">URL Encurtada</label>
-        <div class="bg-green-50 p-4 rounded-lg border border-green-200">
-          <div class="flex items-center justify-between">
-            <.link 
-              href={~p"/#{@url.short}"} 
-              target="_blank" 
-              class="text-green-700 hover:text-green-800 underline font-mono text-lg font-medium"
-            >
-              {EncurtaWeb.Endpoint.url() <> "/" <> @url.short}
-            </.link>
-            <button 
-              class="ml-4 px-4 py-2 bg-green-100 hover:bg-green-200 text-green-700 rounded-lg transition duration-200 flex items-center gap-2"
-              onclick={"navigator.clipboard.writeText('#{EncurtaWeb.Endpoint.url()}/#{@url.short}'); this.innerHTML='✅ Copiado!'; setTimeout(() => this.innerHTML='📋 Copiar', 2000)"}
-            >
-              📋 Copiar
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Código -->
-      <div>
-        <label class="block text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Código</label>
-        <div class="bg-gray-50 p-4 rounded-lg border">
-          <span class="font-mono text-lg text-gray-800">{@url.short}</span>
-        </div>
-      </div>
-
-      <!-- Data de Criação -->
-      <div>
-        <label class="block text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Criado em</label>
-        <div class="bg-gray-50 p-4 rounded-lg border">
-          <span class="text-gray-700">
-            {Calendar.strftime(@url.inserted_at, "%d de %B de %Y às %H:%M")}
-          </span>
-        </div>
+    <!-- Shortened URL -->
+    <div class="border-l-4 border-terminal-primary pl-4">
+      <div class="text-xs text-terminal-muted font-bold mb-1">SHORT_URL:</div>
+      <div class="flex items-center gap-4">
+        <.link 
+          href={~p"/#{@url.short}"} 
+          target="_blank" 
+          class="terminal-success font-mono text-lg font-bold hover:text-terminal-primary"
+        >
+          <%= EncurtaWeb.Endpoint.url() <> "/" <> @url.short %>
+        </.link>
+        <button 
+          class="terminal-button text-xs py-1 px-3"
+          onclick={"navigator.clipboard.writeText('#{EncurtaWeb.Endpoint.url()}/#{@url.short}'); this.innerHTML='COPIED'; setTimeout(() => this.innerHTML='COPY', 2000)"}
+        >
+          COPY
+        </button>
       </div>
     </div>
 
-    <!-- Actions -->
-    <div class="mt-8 flex justify-center gap-4">
-      <.link href={~p"/urls/new"}>
-        <.button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200">
-          Encurtar Outra URL
-        </.button>
-      </.link>
-      <.link href={~p"/urls/#{@url}/edit"}>
-        <.button class="bg-yellow-600 hover:bg-yellow-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200">
-          Editar
-        </.button>
-      </.link>
+    <!-- Short Code -->
+    <div class="border-l-4 border-terminal-secondary pl-4">
+      <div class="text-xs text-terminal-muted font-bold mb-1">SHORT_CODE:</div>
+      <div class="font-mono text-lg text-terminal-text">
+        <%= @url.short %>
+      </div>
     </div>
 
-    <!-- Navigation -->
-    <div class="mt-6 text-center space-x-4">
-      <.link href={~p"/"} class="text-gray-600 hover:text-gray-800 underline">
-        ← Início
+    <!-- Timestamp -->
+    <div class="border-l-4 border-terminal-warning pl-4">
+      <div class="text-xs text-terminal-muted font-bold mb-1">CREATED_AT:</div>
+      <div class="font-mono text-sm text-terminal-text">
+        <%= Calendar.strftime(@url.inserted_at, "%Y-%m-%d %H:%M:%S UTC") %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="border-t border-terminal-secondary pt-6">
+    <div class="terminal-title mb-4">AVAILABLE ACTIONS:</div>
+    
+    <div class="flex gap-4 flex-wrap">
+      <.link href={~p"/urls/new"} class="terminal-button">
+        NEW URL
       </.link>
-      <.link href={~p"/urls"} class="text-blue-600 hover:text-blue-800 underline">
-        Ver todas as URLs
+      
+      <.link href={~p"/urls/#{@url}/edit"} class="terminal-button">
+        EDIT URL
+      </.link>
+      
+      <.link href={~p"/urls"} class="terminal-button">
+        LIST ALL
       </.link>
     </div>
+  </div>
+
+  <!-- Terminal Navigation -->
+  <div class="border-t border-terminal-muted pt-4 flex gap-4 text-sm">
+    <div class="terminal-prompt">
+      <.link href={~p"/"} class="terminal-link">cd ~/</.link>
+    </div>
+    
+    <div class="terminal-prompt">
+      <.link href={~p"/urls"} class="terminal-link">ls urls/</.link>
+    </div>
+  </div>
+  
+  <!-- System Info -->
+  <div class="text-xs space-y-1 text-terminal-muted">
+    <div># URL ID: <%= @url.id %></div>
+    <div># Status: ACTIVE</div>
+    <div># Database: PostgreSQL</div>
   </div>
 </div>

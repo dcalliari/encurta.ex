@@ -1,43 +1,72 @@
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
-  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Header -->
-    <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
-      <div class="text-center">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Editar URL</h1>
-        <p class="text-gray-600">Modifique a URL original desta entrada</p>
+<div class="p-8 space-y-6">
+  <!-- Terminal Command Header -->
+  <div class="space-y-2">
+    <div class="terminal-output">
+      <span class="terminal-info">Executing command: edit --id=<%= @url.id %></span>
+    </div>
+    
+    <div class="terminal-output">
+      <span class="terminal-text">Loading entry for modification...</span>
+    </div>
+    
+    <div class="terminal-output">
+      <span class="terminal-success">Ready for edit operations</span>
+    </div>
+  </div>
+
+  <!-- Current URL Info Display -->
+  <div class="border border-terminal-secondary rounded p-6">
+    <div class="terminal-title mb-4">CURRENT URL ENTRY</div>
+    
+    <div class="space-y-3 text-sm">
+      <div class="flex">
+        <span class="text-terminal-muted w-20 font-mono">SHORT:</span>
+        <span class="text-terminal-success font-mono">
+          <%= EncurtaWeb.Endpoint.url() <> "/" <> @url.short %>
+        </span>
+      </div>
+      
+      <div class="flex">
+        <span class="text-terminal-muted w-20 font-mono">CURRENT:</span>
+        <span class="text-terminal-text break-all">
+          <%= @url.url %>
+        </span>
       </div>
     </div>
+  </div>
 
-    <!-- Current URL Info -->
-    <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
-      <h3 class="text-lg font-medium text-gray-800 mb-4">URL Atual</h3>
-      <div class="space-y-3">
-        <div>
-          <label class="block text-sm font-medium text-gray-500">URL Encurtada:</label>
-          <p class="font-mono text-green-600 break-all">
-            {EncurtaWeb.Endpoint.url() <> "/" <> @url.short}
-          </p>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-500">URL Original Atual:</label>
-          <p class="text-blue-600 break-all">{@url.url}</p>
-        </div>
-      </div>
-    </div>
+  <!-- Edit Interface -->
+  <div class="border border-terminal-primary rounded p-6">
+    <div class="terminal-title mb-6">EDIT URL ENTRY</div>
+    
+    <.url_form changeset={@changeset} action={~p"/urls/#{@url}"} />
+  </div>
 
-    <!-- Form Card -->
-    <div class="bg-white shadow-lg rounded-lg p-8">
-      <.url_form changeset={@changeset} action={~p"/urls/#{@url}"} />
-    </div>
-
-    <!-- Navigation -->
-    <div class="mt-6 text-center space-x-4">
-      <.link href={~p"/urls/#{@url}"} class="text-gray-600 hover:text-gray-800 underline">
-        ← Voltar
-      </.link>
-      <.link href={~p"/urls"} class="text-blue-600 hover:text-blue-800 underline">
-        Ver todas as URLs
+  <!-- Terminal Navigation -->
+  <div class="border-t border-terminal-muted pt-4 flex gap-4 text-sm">
+    <div class="terminal-prompt">
+      <.link href={~p"/urls/#{@url}"} class="terminal-link">
+        cat url/<%= @url.id %>
       </.link>
     </div>
+    
+    <div class="terminal-prompt">
+      <.link href={~p"/urls"} class="terminal-link">
+        ls urls/
+      </.link>
+    </div>
+    
+    <div class="terminal-prompt">
+      <.link href={~p"/"} class="terminal-link">
+        cd ~/
+      </.link>
+    </div>
+  </div>
+  
+  <!-- Help Text -->
+  <div class="text-xs space-y-1 text-terminal-muted">
+    <div># WARNING: Editing will change the target URL while preserving the short code</div>
+    <div># The short URL (<%= EncurtaWeb.Endpoint.url() <> "/" <> @url.short %>) will continue to work</div>
+    <div># Use CTRL+C to cancel, ENTER to save changes</div>
   </div>
 </div>

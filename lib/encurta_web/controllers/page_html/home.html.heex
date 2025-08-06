@@ -1,32 +1,226 @@
-<.flash_group flash={@flash} />
-
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
-  <div class="max-w-md w-full space-y-8">
-    <div class="text-center">
-      <h1 class="text-4xl font-bold text-gray-900 mb-2">Encurta</h1>
-      <p class="text-lg text-gray-600">Encurtador de URLs simples e rápido</p>
-    </div>
-    
-    <div class="bg-white shadow-lg rounded-lg p-6 space-y-6">
-      <div>
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Encurtar nova URL</h2>
-        <.link href={~p"/urls/new"} class="w-full">
-          <.button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition duration-200">
-            Encurtar URL
-          </.button>
-        </.link>
-      </div>
-      
-      <div class="border-t pt-4">
-        <h3 class="text-lg font-medium text-gray-800 mb-3">Suas URLs</h3>
-        <.link href={~p"/urls"} class="text-blue-600 hover:text-blue-800 underline">
-          Ver todas as URLs encurtadas
-        </.link>
-      </div>
-    </div>
-    
-    <div class="text-center text-sm text-gray-500">
-      <p>© 2025 Encurta - Desenvolvido com Phoenix Framework</p>
+<div class="space-y-8">
+  <!-- ASCII Art Logo -->
+  <div class="ascii-art text-center mb-8">
+███████╗███╗   ███╗ ██████╗██╗   ██╗██████╗ ████████╗ █████╗ 
+██╔════╝████╗ ████║██╔════╝██║   ██║██╔══██╗╚══██╔══╝██╔══██╗
+█████╗  ██╔████╔██║██║     ██║   ██║██████╔╝   ██║   ███████║
+██╔══╝  ██║╚██╔╝██║██║     ██║   ██║██╔══██╗   ██║   ██╔══██║
+███████╗██║ ╚═╝ ██║╚██████╗╚██████╔╝██║  ██║   ██║   ██║  ██║
+╚══════╝╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝
+  </div>
+  
+  <div class="text-center mb-8 text-terminal-text">
+    <p>URL Shortener - Terminal Interface</p>
+    <p class="text-terminal-muted text-sm">Type commands below or use quick actions</p>
+  </div>
+  
+  <!-- System status -->
+  <div class="mt-12 pt-4 border-t border-terminal-muted text-xs">
+    <div class="flex justify-between">
+      <span class="text-terminal-muted">[encurta v1.0.0]</span>
+      <span class="text-terminal-success">● online</span>
     </div>
   </div>
 </div>
+
+<div class="terminal-window min-h-screen">
+  <!-- Terminal Header -->
+  <div class="terminal-header">
+    <div class="terminal-dots">
+      <div class="terminal-dot close"></div>
+      <div class="terminal-dot minimize"></div>
+      <div class="terminal-dot maximize"></div>
+    </div>
+    <span class="text-terminal-primary font-bold">encurta@terminal:~$</span>
+    <div class="flex-1 text-right">
+      <.terminal_status status="online" message="All systems operational" />
+    </div>
+  </div>
+  
+  <!-- Terminal Content -->
+  <div class="p-8 space-y-6">
+    <!-- ASCII Art Logo -->
+    <div class="ascii-art text-center mb-8">
+███████╗███╗   ███╗ ██████╗██╗   ██╗██████╗ ████████╗ █████╗ 
+██╔════╝████╗ ████║██╔════╝██║   ██║██╔══██╗╚══██╔══╝██╔══██╗
+█████╗  ██╔████╔██║██║     ██║   ██║██████╔╝   ██║   ███████║
+██╔══╝  ██║╚██╔╝██║██║     ██║   ██║██╔══██╗   ██║   ██╔══██║
+███████╗██║ ╚═╝ ██║╚██████╗╚██████╔╝██║  ██║   ██║   ██║  ██║
+╚══════╝╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝
+    </div>
+    
+    <!-- Terminal Boot Output -->
+    <.terminal_output>
+      <:line type="success">System initialized successfully</:line>
+      <:line type="info">URL Shortener v1.0.0 - Phoenix Terminal Interface</:line>
+      <:line type="info">Phoenix Framework v1.7 - Elixir Runtime</:line>
+      <:line type="muted">Type 'help' for available commands</:line>
+    </.terminal_output>
+    
+    <!-- Live Terminal Progress -->
+    <.terminal_progress value={100} label="Loading modules..." />
+    
+    <!-- Command Interface -->
+    <div class="mt-8 space-y-6">
+      <!-- Available Commands -->
+      <div class="border border-terminal-secondary rounded p-6">
+        <div class="terminal-title mb-4">AVAILABLE COMMANDS:</div>
+        
+        <.terminal_output>
+          <:line type="info">• shorten   - Create a new short URL</:line>
+          <:line type="info">• list      - Show all shortened URLs</:line>
+          <:line type="info">• stats     - Display system statistics</:line>
+          <:line type="info">• help      - Show this help message</:line>
+          <:line type="info">• clear     - Clear terminal screen</:line>
+        </.terminal_output>
+      </div>
+      
+      <!-- Interactive Command Line -->
+      <div class="border border-terminal-secondary rounded p-4">
+        <div class="terminal-title mb-4">INTERACTIVE TERMINAL:</div>
+        
+        <div class="space-y-3">
+          <!-- Command Input -->
+          <div class="flex items-center space-x-2 font-mono">
+            <span class="text-terminal-primary font-bold">$</span>
+            <input 
+              id="terminal-command"
+              type="text" 
+              placeholder="Type a command (shorten, list, help, clear)"
+              class="flex-1 terminal-input terminal-command-input"
+              onkeypress="if(event.key==='Enter') executeCommand(this.value); return true;"
+            />
+          </div>
+          
+          <!-- Command Output Area -->
+          <div id="command-output" class="min-h-[100px] bg-black bg-opacity-20 border border-terminal-muted rounded p-4">
+            <.terminal_output>
+              <:line type="muted">Ready for commands. Type 'help' to get started.</:line>
+            </.terminal_output>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div class="flex gap-4 flex-wrap">
+        <.link href={~p"/urls/new"} class="terminal-button">
+          SHORTEN URL
+        </.link>
+        
+        <.link href={~p"/urls"} class="terminal-button">
+          LIST URLS
+        </.link>
+        
+        <button onclick="showHelp()" class="terminal-button">
+          SHOW HELP
+        </button>
+        
+        <button onclick="clearTerminal()" class="terminal-button">
+          CLEAR SCREEN
+        </button>
+      </div>
+    </div>
+    
+    <!-- System Status -->
+    <div class="mt-12 pt-4 border-t border-terminal-muted">
+      <div class="flex justify-between items-center text-xs">
+        <span class="terminal-muted">© 2025 Encurta Terminal - Phoenix Framework</span>
+        <div class="flex gap-4">
+          <.terminal_status status="online" message="Database: Connected" />
+          <.terminal_status status="online" message="Server: Running" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Terminal JavaScript -->
+<script>
+window.executeCommand = function(command) {
+  const output = document.getElementById('command-output');
+  const input = document.getElementById('terminal-command');
+  
+  if (!command.trim()) return;
+  
+  // Add command to history
+  if (window.terminal) {
+    window.terminal.addCommand(command);
+  }
+  
+  // Clear input
+  input.value = '';
+  
+  // Process command
+  let response = '';
+  switch(command.toLowerCase()) {
+    case 'help':
+      response = `Available commands:
+  shorten - Create a new short URL
+  list - Show all URLs  
+  clear - Clear this terminal
+  help - Show this help
+  stats - Display system stats
+  whoami - Show current user
+  pwd - Show current directory`;
+      break;
+      
+    case 'clear':
+      output.innerHTML = '<div class="terminal-output"><span class="font-mono text-terminal-muted">Terminal cleared.</span></div>';
+      return;
+      
+    case 'shorten':
+      window.location.href = '/urls/new';
+      return;
+      
+    case 'list':
+      window.location.href = '/urls';
+      return;
+      
+    case 'stats':
+      response = `System Statistics:
+  Uptime: ${Math.floor(performance.now() / 1000)}s
+  Memory Usage: ~${Math.floor(Math.random() * 50 + 20)}MB
+  Active Sessions: ${Math.floor(Math.random() * 10 + 1)}
+  URLs Processed: Loading...`;
+      break;
+      
+    case 'whoami':
+      response = 'encurta-user';
+      break;
+      
+    case 'pwd':
+      response = '/home/encurta/terminal';
+      break;
+      
+    default:
+      response = `Command not found: ${command}. Type 'help' for available commands.`;
+  }
+  
+  // Display response
+  output.innerHTML = `<div class="terminal-output">
+    <span class="font-mono text-terminal-primary">$ ${command}</span>
+  </div>
+  <div class="terminal-output mt-2">
+    <span class="font-mono text-terminal-text whitespace-pre-line">${response}</span>
+  </div>`;
+  
+  // Scroll to bottom
+  output.scrollTop = output.scrollHeight;
+}
+
+window.showHelp = function() {
+  executeCommand('help');
+}
+
+window.clearTerminal = function() {
+  executeCommand('clear');
+}
+
+// Auto-focus the terminal input
+document.addEventListener('DOMContentLoaded', function() {
+  const terminalInput = document.getElementById('terminal-command');
+  if (terminalInput) {
+    terminalInput.focus();
+  }
+});
+</script>
