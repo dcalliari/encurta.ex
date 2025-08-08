@@ -406,6 +406,7 @@ defmodule EncurtaWeb.CoreComponents do
   @doc """
   Generates a generic error message.
   """
+  attr :class, :string, default: nil
   slot :inner_block, required: true
 
   def error(assigns) do
