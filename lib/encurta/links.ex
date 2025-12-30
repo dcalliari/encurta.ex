@@ -8,6 +8,8 @@ defmodule Encurta.Links do
 
   alias Encurta.Links.Url
 
+  @short_generation_attempts 5
+
   @doc """
   Returns the list of urls.
 
@@ -70,8 +72,39 @@ defmodule Encurta.Links do
   def create_url(attrs \\ %{}) do
     %Url{}
     |> Url.changeset(attrs)
+    |> insert_with_unique_short(@short_generation_attempts)
+  end
+
+  defp insert_with_unique_short(%Ecto.Changeset{} = changeset, 0) do
+    changeset
     |> Ecto.Changeset.put_change(:short, generate_short_url())
     |> Repo.insert()
+  end
+
+  defp insert_with_unique_short(%Ecto.Changeset{} = changeset, attempts_left)
+       when attempts_left > 0 do
+    changeset = Ecto.Changeset.put_change(changeset, :short, generate_short_url())
+
+    case Repo.insert(changeset) do
+      {:ok, url} ->
+        {:ok, url}
+
+      {:error, %Ecto.Changeset{} = failed_changeset} ->
+        if short_taken?(failed_changeset) do
+          failed_changeset
+          |> Ecto.Changeset.delete_change(:short)
+          |> insert_with_unique_short(attempts_left - 1)
+        else
+          {:error, failed_changeset}
+        end
+    end
+  end
+
+  defp short_taken?(%Ecto.Changeset{errors: errors}) do
+    Enum.any?(errors, fn
+      {:short, {_msg, opts}} when is_list(opts) -> opts[:constraint] == :unique_constraint
+      _ -> false
+    end)
   end
 
   @doc """
