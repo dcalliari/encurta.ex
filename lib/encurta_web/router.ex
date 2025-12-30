@@ -19,7 +19,7 @@ defmodule EncurtaWeb.Router do
 
     get "/", PageController, :home
     resources "/urls", UrlController
-    get "/:short" , UrlController, :redirect_by_short
+    get "/:short", UrlController, :redirect_by_short
   end
 
   # Other scopes may use custom stacks.
