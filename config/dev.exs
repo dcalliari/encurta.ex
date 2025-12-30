@@ -2,9 +2,9 @@ import Config
 
 # Configure your database
 config :encurta, Encurta.Repo,
-  username: "casaos",
-  password: "casaos",
-  hostname: "192.168.15.127",
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost",
   database: "encurta_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
