@@ -5,26 +5,30 @@
     </div>
   </.error>
   
-  <!-- Simple command input -->
+<!-- Simple command input -->
   <div class="flex items-center gap-2 font-mono">
     <span class="text-terminal-primary">$</span>
     <span class="text-terminal-text">shorten</span>
-    <.input 
-      field={f[:url]} 
-      type="url" 
+    <.input
+      field={f[:url]}
+      type="url"
       label=""
-      placeholder="https://example.com/your-long-url" 
+      placeholder="https://example.com/your-long-url"
       class="flex-1 terminal-input"
     />
   </div>
-  
+
   <:actions>
     <div class="flex gap-4">
       <button type="submit" class="terminal-button text-sm">
         execute
       </button>
-      
-      <button type="reset" class="text-terminal-muted hover:text-terminal-text text-sm" onclick="document.querySelector('input[type=url]').value = ''">
+
+      <button
+        type="reset"
+        class="text-terminal-muted hover:text-terminal-text text-sm"
+        onclick="document.querySelector('input[type=url]').value = ''"
+      >
         clear
       </button>
     </div>

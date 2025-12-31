@@ -4,18 +4,18 @@
     <div class="text-terminal-info">$ shorten</div>
     <div class="text-terminal-muted">Enter URL to shorten:</div>
   </div>
-
-  <!-- Simple form -->
+  
+<!-- Simple form -->
   <div class="space-y-4">
     <.url_form changeset={@changeset} action={~p"/urls"} />
   </div>
-
-  <!-- Navigation -->
+  
+<!-- Navigation -->
   <div class="flex gap-6 text-sm border-t border-terminal-muted pt-4">
     <.link href={~p"/"} class="text-terminal-link hover:text-terminal-primary">
       ← back
     </.link>
-    
+
     <.link href={~p"/urls"} class="text-terminal-link hover:text-terminal-primary">
       list urls
     </.link>
