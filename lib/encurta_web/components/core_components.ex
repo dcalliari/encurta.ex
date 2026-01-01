@@ -327,7 +327,13 @@ defmodule EncurtaWeb.CoreComponents do
   def input(%{type: "select"} = assigns) do
     ~H"""
     <div>
-      <.label :if={@label && @label != ""} for={@id} class="text-terminal-muted text-xs font-mono uppercase">{@label}</.label>
+      <.label
+        :if={@label && @label != ""}
+        for={@id}
+        class="text-terminal-muted text-xs font-mono uppercase"
+      >
+        {@label}
+      </.label>
       <select
         id={@id}
         name={@name}
@@ -350,7 +356,13 @@ defmodule EncurtaWeb.CoreComponents do
   def input(%{type: "textarea"} = assigns) do
     ~H"""
     <div>
-      <.label :if={@label && @label != ""} for={@id} class="text-terminal-muted text-xs font-mono uppercase">{@label}</.label>
+      <.label
+        :if={@label && @label != ""}
+        for={@id}
+        class="text-terminal-muted text-xs font-mono uppercase"
+      >
+        {@label}
+      </.label>
       <textarea
         id={@id}
         name={@name}
@@ -370,7 +382,13 @@ defmodule EncurtaWeb.CoreComponents do
   def input(assigns) do
     ~H"""
     <div>
-      <.label :if={@label && @label != ""} for={@id} class="text-terminal-muted text-xs font-mono uppercase">{@label}</.label>
+      <.label
+        :if={@label && @label != ""}
+        for={@id}
+        class="text-terminal-muted text-xs font-mono uppercase"
+      >
+        {@label}
+      </.label>
       <input
         type={@type}
         name={@name}
@@ -489,7 +507,11 @@ defmodule EncurtaWeb.CoreComponents do
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
           class="relative divide-y divide-terminal-muted text-sm leading-6 text-terminal-text"
         >
-          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-black hover:bg-opacity-20">
+          <tr
+            :for={row <- @rows}
+            id={@row_id && @row_id.(row)}
+            class="group hover:bg-black hover:bg-opacity-20"
+          >
             <td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}

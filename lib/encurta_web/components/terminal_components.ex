@@ -37,7 +37,7 @@ defmodule EncurtaWeb.TerminalComponents do
           class="terminal-input w-full"
           {@rest}
         />
-        <.error :for={msg <- (@field.errors || [])}>{msg}</.error>
+        <.error :for={msg <- @field.errors || []}>{msg}</.error>
       </div>
     </div>
     """
@@ -252,8 +252,7 @@ defmodule EncurtaWeb.TerminalComponents do
       id={@id}
       class={["fixed inset-0 z-50 flex items-center justify-center", !@show && "hidden"]}
     >
-      <div class="fixed inset-0 bg-black bg-opacity-50" phx-click={JS.hide(to: "##{@id}")}>
-      </div>
+      <div class="fixed inset-0 bg-black bg-opacity-50" phx-click={JS.hide(to: "##{@id}")}></div>
 
       <div class="terminal-modal max-w-lg w-full mx-4 relative">
         <div class="terminal-modal-header">
